@@ -1,0 +1,70 @@
+<?php
+
+function sum_menu() {
+    $items['sum'] = array(
+        'title' => 'Calculate Sum',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('sum_form'),
+        'access callback' => MENU_NORMAL_ITEM,
+    );
+    $items['sum_success_page'] = array(
+        'title' => 'Success',
+        'page callback' => 'sum_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function sum_form() {
+    $form = array();
+    $form['first_number'] = array(
+        '#title' => 'First Number',
+        '#type' => 'textfield',
+        '#description' => t('Please enter your first number.'),
+        '#element_validate' => array(
+            'element_validate_number', 'element_validate_range'),
+        '#required' => TRUE,
+    );
+
+    $form['second_number'] = array(
+        '#title' => 'Second Number',
+        '#type' => 'textfield',
+        '#description' => t('Please enter your second number.'),
+        '#element_validate' => array(
+            'element_validate_number', 'bob'),
+        '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Calculate Sum',
+    );
+    return $form;
+}
+
+function element_validate_range($element) {
+    if ($element['#value'] > 5 || $element['#value'] < 3) {
+        form_error($element, t('Do it right, Jerk face!!!'));
+    }
+}
+
+function bob($element) {
+    if ($element['#value'] % 2 != 0) {
+        form_error($element, t('Not even...'));
+    }
+}
+
+function sum_form_submit($form, &$form_state) {
+    $first_number = $form_state['values']['first_number'];
+    $second_number = $form_state['values']['second_number'];
+    $sum = $first_number * $second_number;
+    $_SESSION['turkey'] = $sum;
+
+    $form_state['redirect'] = 'sum_success_page';
+}
+
+function sum_success() {
+    $answer = $_SESSION['turkey'];
+    return 'Your multiple is ' . $answer;
+}
