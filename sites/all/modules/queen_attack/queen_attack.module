@@ -1,0 +1,100 @@
+<?php
+
+function queen_attack_menu() {
+    $items['queen_attack'] = array(
+        'title' => 'Queen Attack',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('queen_attack_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['queen_attack_answer_page'] = array(
+        'title' => 'Answer',
+        'page callback' => 'queen_attack_answer',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function queen_attack_form() {
+    $form['queen_x'] = array(
+        '#title' => 'Queen X',
+        '#type' => 'textfield',
+        '#description' => t("Enter the Queen's X axis."),
+        '#element_validate' => array(
+            'element_validate_number', 'sam'),
+        '#required' => TRUE,
+    );
+
+    $form['queen_y'] = array(
+        '#title' => 'Queen Y',
+        '#type' => 'textfield',
+        '#description' => t("Enter the Queen's Y axis."),
+        '#element_validate' => array(
+            'element_validate_number', 'sam'),
+        '#required' => TRUE,
+    );
+
+    $form['target_x'] = array(
+        '#title' => 'Target X',
+        '#type' => 'textfield',
+        '#description' => t("Enter the Targets's X axis."),
+        '#element_validate' => array(
+            'element_validate_number', 'sam'),
+        '#required' => TRUE,
+    );
+
+    $form['target_y'] = array(
+        '#title' => 'Target Y',
+        '#type' => 'textfield',
+        '#description' => t("Enter the Target's Y axis."),
+        '#element_validate' => array(
+            'element_validate_number', 'sam'),
+        '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Check Vulnerability',
+    );
+
+    return $form;
+}
+
+function sam($element) {
+    // return drupal_set_message($element);
+    if ($element['#value'] > 8 || $element['#value'] < 1) {
+        form_error($element, t('Do it right, Jerk face!!!'));
+    }
+}
+
+function queen_attack_form_submit($form, $form_state) {
+    $queenx = $form_state['values']['queen_x'];
+    $queeny = $form_state['values']['queen_y'];
+    $targetx = $form_state['values']['target_x'];
+    $targety = $form_state['values']['target_y'];
+
+    if ($queenx == $targetx && $queeny == $targety) {
+        return drupal_set_message('Same position');
+    }
+    elseif ($queenx == $targetx || $queeny == $targety) {
+        return drupal_set_message('chow down');
+    }
+    else {
+        if ($queenx > $targetx) {
+            $resultx = $queenx - $targetx;
+        }
+        else $resultx = $targetx - $queenx;
+        if ($queeny > $targety){
+            $resulty = $queeny - $targety;
+        }
+        else $resulty = $targety - $queeny;
+        if ($resultx == $resulty) {
+            return drupal_set_message('chow down');
+        }
+        else {
+            return drupal_set_message('starve');
+        }
+    }
+}

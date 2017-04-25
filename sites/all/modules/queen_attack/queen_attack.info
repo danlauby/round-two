@@ -1,0 +1,5 @@
+name = Queen Attack
+description = Check to see if an entered square is vulnerable to the queen.
+package = Epicodus Examples
+core = 7.x
+files = queen_attack.module
