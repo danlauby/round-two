@@ -1,0 +1,5 @@
+name = Pingypongy
+description = a game for people to play - use math to make yourself interesting
+package = Advanced Modules
+core = 7.x
+file[] = pingypong.module

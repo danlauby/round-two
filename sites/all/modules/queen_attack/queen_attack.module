@@ -74,7 +74,6 @@ function queen_attack_form_submit($form, $form_state) {
     $queeny = $form_state['values']['queen_y'];
     $targetx = $form_state['values']['target_x'];
     $targety = $form_state['values']['target_y'];
-
     if ($queenx == $targetx && $queeny == $targety) {
         return drupal_set_message('Same position');
     }

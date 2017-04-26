@@ -1,0 +1,5 @@
+name = apier
+description = make a flickr API call
+core = 7.x
+package = Special API
+file[] = api.module

@@ -44,7 +44,7 @@ function sum_form() {
 }
 
 function element_validate_range($element) {
-    if ($element['#value'] > 5 || $element['#value'] < 3) {
+    if ($element['#value'] > 10 || $element['#value'] < 0) {
         form_error($element, t('Do it right, Jerk face!!!'));
     }
 }
@@ -66,5 +66,5 @@ function sum_form_submit($form, &$form_state) {
 
 function sum_success() {
     $answer = $_SESSION['turkey'];
-    return 'Your multiple is ' . $answer;
+    return 'Your sum is ' . $answer;
 }

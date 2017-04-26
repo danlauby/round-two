@@ -1,0 +1,63 @@
+<?php
+function pingypong_menu() {
+    $items['pongy'] = array(
+        'title' => 'PongDong',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('pongy_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['play_pong_success_page'] = array(
+        'title' => 'Answer',
+        'page callback' => 'play_pong_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function pongy_form() {
+  $form['count_goal'] = array(
+    '#title' => 'Count Goal',
+    '#type' => 'textfield',
+    '#description' => t('Please put a number so your uncle can see it'),
+    '#element_validate' => array('jquell'),
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'do it',
+  );
+
+  return $form;
+}
+
+function jquell($element) {
+    if ($element['#value'] > 50 || $element['#value'] < -50) {
+        form_error($element, t('Number must be less than 50 or greater than -50.'));
+    }
+}
+
+// function play_pong_form_submit($form, $form_state) {
+//   $result;
+//   $input = $form_state['values']['count_goal'];
+//   var_dump($input);
+//     for ($i = 1; $i <= $input; $i++) {
+//       if ($i % 15 === 0) {
+//           return drupal_set_message('Ping Pong<br/>');
+//       } else if ($i % 3 === 0) {
+//           return drupal_set_message('Ping<br/>');
+//       } else if ($i % 5 == 0) {
+//           return drupal_set_message('Pong<br/>');
+//       } else {
+//           return drupal_set_message($i . '<br/>');
+//       }
+//     }
+//     $_SESSION['play_pong_output'] = $result;
+//     $form_state['redirect'] = 'play_pong_success_page';
+//   }
+//
+//   function play_pong_success() {
+//     return  $answer = $_SESSION['play_pong_output'];
+//   }

@@ -1,0 +1,67 @@
+<?php
+
+
+function flickr_menu() {
+  $items = array();
+  $items['flickr'] = array(
+    'title' => 'Topics',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('flickr_form'),
+    'access callback' => MENU_NORMAL_ITEM,
+  );
+  $items['flickr_success_page'] = array(
+      'title' => 'Success',
+      'page callback' => 'flickr_success',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function flickr_form() {
+    $form['flickr'] = array(
+        '#title' => 'topics',
+        '#type' => 'textfield',
+        '#description' => t('Find recent flickr images'),
+        '#required' => TRUE,
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Search',
+    );
+    return $form;
+}
+
+
+
+
+function flickr_form_submit($form, &$form_state) {
+$topic = $form_state['values']['flickr'];
+// Get cURL resource
+$curl = curl_init();
+// Set some options - we are passing in a useragent too here
+curl_setopt_array($curl, array(
+    CURLOPT_RETURNTRANSFER => 1,
+    CURLOPT_URL => 'https://api.flickr.com/services/rest/?method=flickr.photos.search&tags='. $topic .'&api_key=ebbcf201d4f568b028202a9810c2f6f1&per_page=10&format=json&nojsoncallback=1',
+    CURLOPT_USERAGENT => 'Codular Sample cURL Request'
+));
+// Send the request & save response to $resp
+$result = curl_exec($curl);
+// Close request to clear up some resources
+curl_close($curl);
+
+
+$images_array = json_decode($result, true);
+$_SESSION['results'] = $images_array;
+watchdog('flickr', $form_state['clicked_button']['#value']);
+$form_state['redirect'] = 'flickr_success_page';
+}
+
+function flickr_success() {
+    $answer = $_SESSION['results'];
+    echo '<pre>';
+    var_dump($answer);
+    echo '</pre>';
+    exit;
+    return $answer;
+}
