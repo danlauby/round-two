@@ -1,0 +1,48 @@
+<?php
+
+function shirts_menu() {
+    $cheesecake['shirts'] = [
+        'title' => 'Shirt ideas',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => ['shirts_form'],
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    ];
+    $cheesecake['shirts_answer_page'] = [
+        'title' => 'Here is what you said!',
+        'page callback' => 'shirts_answer',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    ];
+    return $cheesecake;
+}
+
+function shirts_form() {
+    $pizza['shirt_ideas'] = [
+        '#title' => 'Enter a new shirt design idea:',
+        '#type' => 'textfield',
+    ];
+    $pizza['shirt_price'] = [
+        '#title' => 'Enter a new shirt price:',
+        '#type' => 'textfield',
+        '#element_validate' => ['element_validate_integer_positive'],
+    ];
+    $pizza['submit'] = [
+        '#type' => 'submit',
+        '#value' => 'Get Down!',
+    ];
+    return $pizza;
+}
+
+function shirts_form_submit($form, &$form_state) {
+    $shirt_idea = $form_state['values']['shirt_ideas'];
+    $shirt_price = $form_state['values']['shirt_price'];
+    $answers = [$shirt_idea, $shirt_price];
+    $_SESSION['answers_output'] = $answers;
+    $form_state['redirect'] = 'shirts_answer_page';
+}
+
+function shirts_answer() {
+    $answers = $_SESSION['answers_output'];
+    return "<h2><strong>$answers[0] </strong><em> is a great idea! And for the low price of</em> <strong>$$answers[1].00</strong>!</h2>";
+}

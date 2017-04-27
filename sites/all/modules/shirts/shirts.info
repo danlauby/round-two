@@ -1,0 +1,5 @@
+name = Shirts
+description = Users can add new shirt design ideas.
+package = Custom Modules
+core = 7.x
+files[] = shirts.module
